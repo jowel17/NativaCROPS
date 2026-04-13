@@ -13,7 +13,9 @@
 #' @param number_size tamaño de letra que obtendra los numeros en el grafico
 #' @param promediar condicional que sirve si se necesita promediar mas alla de las repeticiones
 #' @param transformar condicional que sirve para transformar datos en la forma raiz cuadrada x+1 en caso de requerir.
-#'
+#' @param ancho ancho del grafico de barras a exportar
+#' @param altura altura del grafico a exportar
+#' @param ancho_lineas ancho del grafico de lineas a exportar
 #'
 #' @importFrom dplyr %>% filter mutate arrange bind_rows rename
 #' @importFrom tidyr pivot_longer
@@ -42,10 +44,15 @@
 dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
                         etiqueta_y = "Valor", letra = 1, numero = 0.80, size = 5,
                         filas_trat = 2, number_size = 5, promediar = FALSE,
-                        transformar = FALSE) {
+                        transformar = FALSE, ancho = 14, altura = 8,
+                        ancho_lineas = 14) {
 
   #Cargar datos
   datos <- read_excel(archivo, sheet = "Base")
+
+  if ("Planta" %in% names(datos)) {
+    datos$Planta <- as.factor(datos$Planta)
+  }
 
   datos$Tratamientos <- as.factor(datos$Tratamientos)
   datos$Repeticion <- as.factor(datos$Repeticion)
@@ -62,7 +69,7 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
   if (promediar) {
     datos_largos <- datos %>%
       pivot_longer(
-        cols = -c(Tratamientos,Repeticion),
+        cols = -any_of(c("Tratamientos", "Repeticion", "Planta")),
         names_to = "Variable",
         values_to = "value") %>%
       group_by(Tratamientos, Repeticion, Variable) %>%
@@ -163,7 +170,7 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
     lista_hojas[[paste0("Tukey_", var)]] <- get(nombre_df)
   }
 
-  write_xlsx(lista_hojas, path = "Resultados/Resultados.xlsx")
+  write_xlsx(lista_hojas, path = nombre_salida)
 
   dda <- unique(grupos$Variable)
 
@@ -198,7 +205,8 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
             axis.title.y = element_text(face = "bold",size = 12),
             legend.text = element_text(color = "black", size = 12),
             legend.title = element_text(color = "black"),
-            axis.text.x = element_text(angle = 35, hjust = 1, color = "black")) +
+            axis.text.x = element_text(angle = 35, hjust = 1, color = "black", size = 10),
+            axis.text.y = element_text(size = 10)) +
       theme(legend.position = "none") +
       geom_text(data = data,
                 aes(y = Media * numero, label = round(Media,2)), size = number_size)
@@ -217,7 +225,8 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
                           axis.title.y = element_text(size = 12, face = "bold"),
                           legend.text = element_text(color = "black", size = 10),
                           legend.title = element_text(color = "black"),
-                          axis.text.x = element_text(angle = 35, hjust = 1, color = "black")) +
+                          axis.text.x = element_text(angle = 35, hjust = 1, color = "black", size = 10),
+                          axis.text.y = element_text(size = 10)) +
       geom_text(data = testigo, aes(x = as.factor(Variable), y = Media + numero, label = round(Media,2)),
                 color = "black",
                 fontface = "bold",
@@ -233,10 +242,10 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
     ggsave(
       filename = paste0("Graficos/grafico_barras_", nombre, ".png"),
       plot = lista_graficos[[nombre]],
-      width = 14, height = 8, units = "in", dpi = 300
+      width = ancho, height = altura, units = "in", dpi = 300
     )
   }
 
-  ggsave("Graficos/Grafica de Lineas.png", g_lineas,width = 14, height = 8 )
+  ggsave("Graficos/Grafica de Lineas.png", g_lineas,width = ancho_lineas, height = altura )
 
 }

@@ -14,7 +14,10 @@ dbca_simple(
   filas_trat = 2,
   number_size = 5,
   promediar = FALSE,
-  transformar = FALSE
+  transformar = FALSE,
+  ancho = 14,
+  altura = 8,
+  ancho_lineas = 14
 )
 }
 \arguments{
@@ -37,6 +40,12 @@ dbca_simple(
 \item{promediar}{condicional que sirve si se necesita promediar mas alla de las repeticiones}
 
 \item{transformar}{condicional que sirve para transformar datos en la forma raiz cuadrada x+1 en caso de requerir.}
+
+\item{ancho}{ancho del grafico de barras a exportar}
+
+\item{altura}{altura del grafico a exportar}
+
+\item{ancho_lineas}{ancho del grafico de lineas a exportar}
 }
 \value{
 Resumen de los tratamientos
