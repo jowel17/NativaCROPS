@@ -1,14 +1,13 @@
 Package: NativaCROPS
-Title: Tools for Statistical Analysis of Agricultural Experiments
-
+Title: Analysis of Randomized Complete Block Designs (RCBD)
 Version: 0.0.0.9001
 Authors@R: 
     c(
-    person("Joel", "Guananga", , "jguananga@earth.ac.cr", role = c("aut", "cre")),
-    person("Gudiel", "Yoj", , "yojjuan076@gmail.com", role = "aut")
+      person("Joel", "Guananga", , "jguananga@earth.ac.cr", role = c("aut", "cre")),
+      person("Gudiel", "Yoj", , "yojjuan076@gmail.com", role = "aut")
     )
-    
-Description: Realiza el análisis de un diseño en bloques completamente al azar (DBCA), incluyendo ANOVA, comparación de medias y visualización gráfica de los resultados.
+Description: Realiza el análisis de un diseño en bloques completamente al azar (DBCA),
+    incluyendo ANOVA, comparación de medias y visualización gráfica de los resultados.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports:
