@@ -7,7 +7,14 @@
 dbca_simple(
   archivo,
   nombre_salida = "Resultados/Resultados.xlsx",
-  etiqueta_y = "Valor"
+  etiqueta_y = "Valor",
+  letra = 1,
+  numero = 0.8,
+  size = 5,
+  filas_trat = 2,
+  number_size = 5,
+  promediar = FALSE,
+  transformar = FALSE
 )
 }
 \arguments{
@@ -16,6 +23,20 @@ dbca_simple(
 \item{nombre_salida}{nombre del archivo que guardara los CV, los valores p y letras de significancia}
 
 \item{etiqueta_y}{nombre que tomara el eje y en todos los graficos generados}
+
+\item{letra}{indica el valor a sumar a la media de cada tratamiento para ubicar en el eje y la posicion del rango de significancia}
+
+\item{numero}{indica el valor a multiplicar a la media de cada tratamiento para ubicar en el eje y la posicion de la media en el grafico}
+
+\item{size}{tamaño de letra que obtendra los rangos de significancia en el grafico}
+
+\item{filas_trat}{numero de filas en donde se ubicaran las leyendas de los tratamientos para el grafico de lineas}
+
+\item{number_size}{tamaño de letra que obtendra los numeros en el grafico}
+
+\item{promediar}{condicional que sirve si se necesita promediar mas alla de las repeticiones}
+
+\item{transformar}{condicional que sirve para transformar datos en la forma raiz cuadrada x+1 en caso de requerir.}
 }
 \value{
 Resumen de los tratamientos

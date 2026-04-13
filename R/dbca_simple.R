@@ -6,6 +6,14 @@
 #' @param archivo nombre del archivo a analizar
 #' @param nombre_salida nombre del archivo que guardara los CV, los valores p y letras de significancia
 #' @param etiqueta_y nombre que tomara el eje y en todos los graficos generados
+#' @param letra indica el valor a sumar a la media de cada tratamiento para ubicar en el eje y la posicion del rango de significancia
+#' @param numero indica el valor a multiplicar a la media de cada tratamiento para ubicar en el eje y la posicion de la media en el grafico
+#' @param size tamaño de letra que obtendra los rangos de significancia en el grafico
+#' @param filas_trat numero de filas en donde se ubicaran las leyendas de los tratamientos para el grafico de lineas
+#' @param number_size tamaño de letra que obtendra los numeros en el grafico
+#' @param promediar condicional que sirve si se necesita promediar mas alla de las repeticiones
+#' @param transformar condicional que sirve para transformar datos en la forma raiz cuadrada x+1 en caso de requerir.
+#'
 #'
 #' @importFrom dplyr %>% filter mutate arrange bind_rows rename
 #' @importFrom tidyr pivot_longer
@@ -18,6 +26,8 @@
 #' @importFrom emmeans emmeans
 #' @importFrom multcomp cld
 #' @importFrom jtools theme_apa
+#' @importFrom dplyr across where any_of group_by summarise
+#' @importFrom ggplot2 guides guide_legend
 #'
 #' @returns Resumen de los tratamientos
 #' @export
@@ -28,8 +38,11 @@
 #' etiqueta_y = "Incidencia %")
 #' }
 
+
 dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
-                        etiqueta_y = "Valor") {
+                        etiqueta_y = "Valor", letra = 1, numero = 0.80, size = 5,
+                        filas_trat = 2, number_size = 5, promediar = FALSE,
+                        transformar = FALSE) {
 
   #Cargar datos
   datos <- read_excel(archivo, sheet = "Base")
@@ -37,10 +50,33 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
   datos$Tratamientos <- as.factor(datos$Tratamientos)
   datos$Repeticion <- as.factor(datos$Repeticion)
 
-  #Pivotar
-  datos_largos <- datos %>%   pivot_longer(cols = -c(Tratamientos, Repeticion),
-                                           names_to = "Variable",
-                                           values_to = "Valor")
+  # 🔥 TRANSFORMACIÓN (AQUÍ VA)
+  if (transformar) {
+    datos <- datos %>%
+      mutate(across(
+        where(is.numeric) & !any_of(c("Tratamientos", "Repeticion", "Planta")),
+        ~ sqrt(. + 1)
+      ))
+  }
+
+  if (promediar) {
+    datos_largos <- datos %>%
+      pivot_longer(
+        cols = -c(Tratamientos,Repeticion),
+        names_to = "Variable",
+        values_to = "value") %>%
+      group_by(Tratamientos, Repeticion, Variable) %>%
+      summarise(
+        Valor = mean(value),
+        .groups = "drop"
+      )
+  } else {
+    datos_largos <- datos %>%
+      pivot_longer(
+        cols = -c(Tratamientos, Repeticion),
+        names_to = "Variable",
+        values_to = "Valor")
+  }
 
   variables <- unique(datos_largos$Variable)
 
@@ -152,7 +188,7 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
     lista_graficos[[dda[i]]] <- ggplot(data, aes(x = reorder(Tratamientos, Media), y = Media, fill = Trat_base)) +
       geom_bar(stat = "identity", position = "dodge", lwd = 0.4) +
       geom_text(data = data,
-                aes(y = Media * 0.85, label = Simplificados), fontface = "bold", size = 5.5) +
+                aes(y = Media + letra, label = Simplificados), fontface = "bold", size = size) +
       labs(title = paste("Analisis", variables[i]), y = etiqueta_y, x = "Tratamientos") +
       theme_minimal() +
       theme(legend.position = "bottom",
@@ -165,7 +201,7 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
             axis.text.x = element_text(angle = 35, hjust = 1, color = "black")) +
       theme(legend.position = "none") +
       geom_text(data = data,
-                aes(y = Media +  3, label = round(Media,2)), size = 5)
+                aes(y = Media * numero, label = round(Media,2)), size = number_size)
 
 
     # Grafico de Lineas -------------------------------------------------------
@@ -182,9 +218,13 @@ dbca_simple <- function(archivo, nombre_salida = "Resultados/Resultados.xlsx",
                           legend.text = element_text(color = "black", size = 10),
                           legend.title = element_text(color = "black"),
                           axis.text.x = element_text(angle = 35, hjust = 1, color = "black")) +
-      geom_text(data = testigo, aes(x = as.factor(Variable), y = Media + 2, label = round(Media,2)),
+      geom_text(data = testigo, aes(x = as.factor(Variable), y = Media + numero, label = round(Media,2)),
                 color = "black",
-                fontface = "bold")
+                fontface = "bold",
+                size = number_size) +
+      guides(
+        color = guide_legend(nrow = filas_trat, byrow = TRUE)
+      )
 
   }
 
