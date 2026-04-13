@@ -1,8 +1,14 @@
 Package: NativaCROPS
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Realiza el análisis de un diseño en bloques completamente al azar (DBCA), 
+incluyendo ANOVA, comparación de medias y visualización gráfica de los resultados.
+
+Version: 0.0.0.9001
 Authors@R: 
-    person("Joel", "Guananga", , "jguananga@earth.ac.cr", role = c("aut", "cre"))
+    c(
+    person("Joel", "Guananga", , "jguananga@earth.ac.cr", role = c("aut", "cre")),
+    person("Gudiel" "Yoj", , "yojjuan076@gmail.com", role = "aut")
+    )
+    
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
