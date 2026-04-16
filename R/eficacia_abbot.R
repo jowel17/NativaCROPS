@@ -118,10 +118,11 @@ eficacia_abbot <- function(archivo, promediar = FALSE) {
 
 
 
-
   resultados <- resultados %>%
     select(Tratamientos, contains("Eficacia")) %>%
     dplyr::select(-2)
+
+  write_excel(resultados, "Resultados/Eficacias")
 
 
   resultados_largos <- resultados %>%

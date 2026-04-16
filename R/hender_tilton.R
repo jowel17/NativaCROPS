@@ -122,11 +122,11 @@ hender_tilton <- function(archivo, promediar = FALSE) {
   resultados <- calcular_eficacia(resultados, control, var_1)
 
 
-
-
   resultados <- resultados %>%
     select(Tratamientos, contains("Eficacia")) %>%
     dplyr::select(-2)
+
+  write_excel(resultados, "Resultados/Eficacias")
 
 
   resultados_largos <- resultados %>%
