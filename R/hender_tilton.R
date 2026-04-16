@@ -126,7 +126,7 @@ hender_tilton <- function(archivo, promediar = FALSE) {
     select(Tratamientos, contains("Eficacia")) %>%
     dplyr::select(-2)
 
-  write_excel(resultados, "Resultados/Eficacias")
+  write_xlsx(resultados, "Resultados/Eficacias.xlsx")
 
 
   resultados_largos <- resultados %>%
