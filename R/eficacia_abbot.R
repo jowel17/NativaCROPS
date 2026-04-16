@@ -36,7 +36,7 @@ eficacia_abbot <- function(archivo, promediar = FALSE) {
   if (promediar) {
     datos <- datos %>%
       pivot_longer(
-        cols = -c(Tratamientos,Repeticion),
+        cols = -c(Tratamientos,Repeticion,Planta),
         names_to = "Variable",
         values_to = "Valor") %>%
       group_by(Tratamientos, Repeticion, Variable) %>%

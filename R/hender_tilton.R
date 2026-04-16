@@ -38,10 +38,10 @@ hender_tilton <- function(archivo, promediar = FALSE) {
   if (promediar) {
     datos <- datos %>%
       pivot_longer(
-        cols = -c(Tratamientos,Repeticion),
+        cols = -c(Tratamientos,Repeticion,Planta),
         names_to = "Variable",
         values_to = "Valor") %>%
-      group_by(Tratamientos, Repeticion, Variable) %>%
+      group_by(Tratamientos, Variable) %>%
       summarise(
         Media = mean(Valor),
         .groups = "drop"
