@@ -28,7 +28,7 @@
 #'
 eficacia_abbot <- function(archivo, promediar = FALSE) {
 
-  datos <- read_excel("Datos/TETRUR.xlsx", sheet = "Base")
+  datos <- read_excel(archivo, sheet = "Base")
 
   promediar <- FALSE
 
