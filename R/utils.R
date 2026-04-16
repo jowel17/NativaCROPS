@@ -1,5 +1,6 @@
 utils::globalVariables(c(
   "Tratamientos", "Repeticion", "Variable",
   "Media", "Trat_base", "Simplificados",
-  "Aplicacion", "Dias", ".group", "emmean", "value"
+  "Aplicacion", "Dias", ".group", "emmean", "value",
+  "Valor","Promedio","Eficacia(%)"
 ))
