@@ -140,7 +140,7 @@ eficacia_abbot <- function(archivo, promediar = FALSE) {
 
   grafico_1 <- ggplot(grupos,
                       aes(x = Promedio,
-                          y = reorder(Tratamientos, -Promedio),
+                          y = reorder(Tratamientos, Promedio),
                           fill = Trat_base)) +
     geom_col() +
     geom_text(data = grupos,
