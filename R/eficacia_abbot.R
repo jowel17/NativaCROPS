@@ -30,9 +30,6 @@ eficacia_abbot <- function(archivo, promediar = FALSE) {
 
   datos <- read_excel(archivo, sheet = "Base")
 
-  promediar <- FALSE
-
-
   if (promediar) {
     datos <- datos %>%
       pivot_longer(
@@ -152,7 +149,7 @@ eficacia_abbot <- function(archivo, promediar = FALSE) {
     theme(legend.position = "bottom") +
     theme_apa() + theme(legend.position = "none") +
     labs(title = "Eficacias(%) promedio de los diferentes Tratamientos",
-         y = "Eficacia(%)")
+         y = "Tratamientos", x = "Eficacia(%)")
 
   grafico_1
 
