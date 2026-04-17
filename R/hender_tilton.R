@@ -32,9 +32,6 @@ hender_tilton <- function(archivo, promediar = FALSE) {
 
   datos <- read_excel(archivo, sheet = "Base")
 
-  promediar <- FALSE
-
-
   if (promediar) {
     datos <- datos %>%
       pivot_longer(
