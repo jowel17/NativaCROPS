@@ -155,7 +155,7 @@ hender_tilton <- function(archivo, promediar = FALSE) {
     theme(legend.position = "bottom") +
     theme_apa() + theme(legend.position = "none") +
     labs(title = "Eficacias(%) promedio de los diferentes Tratamientos",
-         y = "Eficacia(%)")
+         y = "Tratamientos", x = "Eficacia(%)")
 
   grafico_1
 
