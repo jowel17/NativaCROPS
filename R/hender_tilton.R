@@ -41,7 +41,7 @@ hender_tilton <- function(archivo, promediar = FALSE) {
         cols = -c(Tratamientos,Repeticion,Planta),
         names_to = "Variable",
         values_to = "Valor") %>%
-      group_by(Tratamientos, Variable) %>%
+      group_by(Tratamientos,Variable) %>%
       summarise(
         Media = mean(Valor),
         .groups = "drop"
@@ -122,6 +122,8 @@ hender_tilton <- function(archivo, promediar = FALSE) {
   resultados <- calcular_eficacia(resultados, control, var_1)
 
 
+
+
   resultados <- resultados %>%
     select(Tratamientos, contains("Eficacia")) %>%
     dplyr::select(-2)
@@ -151,7 +153,7 @@ hender_tilton <- function(archivo, promediar = FALSE) {
                           fill = Trat_base)) +
     geom_col() +
     geom_text(data = grupos,
-              aes(x = 100, y = Tratamientos,
+              aes(x = 110, y = Tratamientos,
                   label = paste0(round(Promedio,2),"%"))) +
     theme(legend.position = "bottom") +
     theme_apa() + theme(legend.position = "none") +
